@@ -227,7 +227,7 @@ def readCamerasFromTransforms(path, transformsfile, white_background, extension=
 
         frames = contents["frames"]
         for idx, frame in enumerate(tqdm(frames, leave=False)):
-            image_path = os.path.join(path, frame["file_path"] + extension)
+            image_path = os.path.join(path, 'chapel_day_4k_32x16_rot0', frame["file_path"] + extension)
             image_name = Path(image_path).stem
 
             # NeRF 'transform_matrix' is a camera-to-world transform
