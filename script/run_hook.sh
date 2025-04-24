@@ -1,7 +1,7 @@
 #!/bin/bash
 
 root_dir="datasets/nerf_synthetic/"
-list="chapel_day_4k_32x16_rot0"
+list="hook100_statictimestep50"
 
 for i in $list; do
     python train.py --eval \
