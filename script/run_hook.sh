@@ -4,14 +4,14 @@ root_dir="datasets/nerf_synthetic/"
 list="hook100_statictimestep50"
 
 for i in $list; do
-    #python train.py --eval \
-    #    -s datasets/nerf_synthetic/$i \
-    #    -m output/NeRF_Syn/$i/3dgs \
-    #    --lambda_normal_render_depth 0.01 \
-    #    --lambda_normal_smooth 0.01 \
-    #    --lambda_mask_entropy 0.1 \
-    #    --save_training_vis \
-    #    --lambda_depth_var 1e-2
+    python train.py --eval \
+        -s datasets/nerf_synthetic/$i \
+        -m output/NeRF_Syn/$i/3dgs \
+        --lambda_normal_render_depth 0.01 \
+        --lambda_normal_smooth 0.01 \
+        --lambda_mask_entropy 0.1 \
+        --save_training_vis \
+        --lambda_depth_var 1e-2
 
     python eval_nvs.py --eval \
         -m output/NeRF_Syn/${i}/3dgs \
