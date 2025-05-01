@@ -54,8 +54,8 @@ class Scene:
                                                             debug=args.debug_cuda)
             else:
                 print("Found transforms_train.json file, assuming Blender data set!")
-                scene_info = sceneLoadTypeCallbacks["Blender"](args.source_path, args.white_background, args.eval, 
-                                                               debug=args.debug_cuda)
+                scene_info = sceneLoadTypeCallbacks["Blender"](args.source_path, args.white_background, args.envmap_prefix,
+                                                               args.eval, debug=args.debug_cuda)
         elif os.path.exists(os.path.join(args.source_path, "inputs/sfm_scene.json")):
             print("Found sfm_scene.json file, assuming NeILF data set!")
             scene_info = sceneLoadTypeCallbacks["NeILF"](args.source_path, args.white_background, args.eval,
