@@ -388,7 +388,7 @@ if __name__ == "__main__":
     pp = PipelineParams(parser)
     parser.add_argument('--debug_from', type=int, default=-1)
     parser.add_argument('--detect_anomaly', action='store_true', default=False)
-    parser.add_argument('--envmap_prefix', type=str, default='')
+    parser.add_argument('-envmap_prefix', type=str, default='')
     parser.add_argument('--gui', action='store_true', default=False, help="use gui")
     parser.add_argument('-t', '--type', choices=['render', 'normal', 'neilf'], default='render')
     parser.add_argument("--test_interval", type=int, default=2500)
