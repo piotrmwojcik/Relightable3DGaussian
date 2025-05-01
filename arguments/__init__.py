@@ -47,7 +47,6 @@ class ModelParams(ParamGroup):
         self.data_device = "cuda"
         self.eval = False
         self.debug_cuda = False
-        self.envmap_prefix = ""
         self.global_shs_degree = 3
         self.env_resolution = 16
         super().__init__(parser, "Loading Parameters", sentinel)
