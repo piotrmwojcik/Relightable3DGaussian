@@ -1,12 +1,12 @@
 #!/bin/bash
 
 root_dir="datasets/nerf_synthetic/"
-list="hook100_statictimestep50"
+list="hook100_statictimestep50/chapel_day_4k_32x16_rot0 hook100_statictimestep50/dam_wall_4k_32x16_rot90 hook100_statictimestep50/golden_bay_4k_32x16_rot330"
 
 for i in $list; do
     python train.py --eval \
         -s datasets/nerf_synthetic/$i \
-        -m output/NeRF_Syn/$i/3dgs \
+        -m output/our_ds/$i/3dgs \
         --lambda_normal_render_depth 0.01 \
         --lambda_normal_smooth 0.01 \
         --lambda_mask_entropy 0.1 \
@@ -14,13 +14,13 @@ for i in $list; do
         --lambda_depth_var 1e-2
 
     python eval_nvs.py --eval \
-        -m output/NeRF_Syn/${i}/3dgs \
-        -c output/NeRF_Syn/${i}/3dgs/chkpnt30000.pth
+        -m output/our_ds/${i}/3dgs \
+        -c output/our_ds/${i}/3dgs/chkpnt30000.pth
 
     python train.py --eval \
         -s datasets/nerf_synthetic/$i/ \
-        -m output/NeRF_Syn/$i/neilf \
-        -c output/NeRF_Syn/$i/3dgs/chkpnt30000.pth \
+        -m output/our_ds/$i/neilf \
+        -c output/our_ds/$i/3dgs/chkpnt30000.pth \
         --save_training_vis \
         --position_lr_init 0.000016 \
         --position_lr_final 0.00000016 \
@@ -39,7 +39,7 @@ for i in $list; do
         --lambda_env_smooth 0.01
     
     python eval_nvs.py --eval \
-        -m output/NeRF_Syn/${i}/neilf \
-        -c output/NeRF_Syn/${i}/neilf/chkpnt40000.pth \
+        -m output/our_ds/${i}/neilf \
+        -c output/our_ds/${i}/neilf/chkpnt40000.pth \
         -t neilf
 done
