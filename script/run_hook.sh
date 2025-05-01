@@ -21,6 +21,7 @@ for i in $list; do
 
     python train.py --eval \
         -s datasets/nerf_synthetic/$object/ \
+        --envmap_prefix $i \
         -m output/our_ds/$i/neilf \
         -c output/our_ds/$i/3dgs/chkpnt30000.pth \
         --save_training_vis \
