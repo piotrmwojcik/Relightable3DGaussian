@@ -9,7 +9,7 @@ for i in $list; do
         -m output/our_ds/$i/3dgs \
         --lambda_normal_render_depth 0.01 \
         --lambda_normal_smooth 0.01 \
-        --envmap_prefix $i
+        --envmap_prefix $i \
         --lambda_mask_entropy 0.1 \
         --save_training_vis \
         --lambda_depth_var 1e-2
