@@ -1,11 +1,12 @@
 #!/bin/bash
 
 root_dir="datasets/nerf_synthetic/"
+object="hook100_statictimestep50"
 list="chapel_day_4k_32x16_rot0 dam_wall_4k_32x16_rot90 golden_bay_4k_32x16_rot330"
 
 for i in $list; do
     python train.py --eval \
-        -s datasets/nerf_synthetic/hook100_statictimestep50/ \
+        -s datasets/nerf_synthetic/$object/ \
         -m output/our_ds/$i/3dgs \
         --lambda_normal_render_depth 0.01 \
         --lambda_normal_smooth 0.01 \
@@ -19,7 +20,7 @@ for i in $list; do
         -c output/our_ds/${i}/3dgs/chkpnt30000.pth
 
     python train.py --eval \
-        -s datasets/nerf_synthetic/hook100_statictimestep50/ \
+        -s datasets/nerf_synthetic/$object/ \
         -m output/our_ds/$i/neilf \
         -c output/our_ds/$i/3dgs/chkpnt30000.pth \
         --save_training_vis \
