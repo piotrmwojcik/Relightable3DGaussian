@@ -398,6 +398,7 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--checkpoint", type=str, default=None)
     args = parser.parse_args(sys.argv[1:])
     print(f"Current model path: {args.model_path}")
+    print(f"Light: {args.envmap_prefix}")
     print(f"Current rendering type:  {args.type}")
     print("Optimizing " + args.model_path)
 
