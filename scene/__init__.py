@@ -50,7 +50,7 @@ class Scene:
                                                                    debug=args.debug_cuda)
             elif "Synthetic4Relight" in args.source_path:
                 print("Found transforms_train.json file, assuming Synthetic4Relight data set!")
-                scene_info = sceneLoadTypeCallbacks["Synthetic4Relight"](args.source_path, args.white_background, args.eval,
+                scene_info = sceneLoadTypeCallbacks["Synthetic4Relight"](args.source_path, args.env_resolution, args.white_background, args.eval,
                                                             debug=args.debug_cuda)
             else:
                 print("Found transforms_train.json file, assuming Blender data set!")

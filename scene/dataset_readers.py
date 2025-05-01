@@ -212,7 +212,7 @@ def readColmapSceneInfo(path, images, eval, llffhold=8, debug=False):
     return scene_info
 
 
-def readCamerasFromTransforms(path, transformsfile, white_background, extension=".png", debug=False):
+def readCamerasFromTransforms(path, envmap_prefix, transformsfile, white_background, extension=".png", debug=False):
     cam_infos = []
 
     read_mvs = False
@@ -227,7 +227,7 @@ def readCamerasFromTransforms(path, transformsfile, white_background, extension=
 
         frames = contents["frames"]
         for idx, frame in enumerate(tqdm(frames, leave=False)):
-            image_path = os.path.join(path,  frame["file_path"] + extension)
+            image_path = os.path.join(path, envmap_prefix, frame["file_path"] + extension)
             image_name = Path(image_path).stem
 
             # NeRF 'transform_matrix' is a camera-to-world transform
@@ -272,12 +272,12 @@ def readCamerasFromTransforms(path, transformsfile, white_background, extension=
     return cam_infos
 
 
-def readNerfSyntheticInfo(path, white_background, eval, extension=".png", debug=False):
+def readNerfSyntheticInfo(path, white_background, envmap_prefix, eval, extension=".png", debug=False):
     print("Reading Training Transforms")
-    train_cam_infos = readCamerasFromTransforms(path, "transforms_train.json", white_background, extension, debug=debug)
+    train_cam_infos = readCamerasFromTransforms(path, envmap_prefix, "transforms_train.json", white_background, extension, debug=debug)
     if eval:
         print("Reading Test Transforms")
-        test_cam_infos = readCamerasFromTransforms(path, "transforms_test.json", white_background, extension,
+        test_cam_infos = readCamerasFromTransforms(path, envmap_prefix, "transforms_test.json", white_background, extension,
                                                    debug=debug)
     else:
         test_cam_infos = []
