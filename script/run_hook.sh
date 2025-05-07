@@ -2,7 +2,7 @@
 
 root_dir="datasets/nerf_synthetic/"
 object="hook150_v2_statictimestep1"
-list="chapel_day_4k_32x16_rot0 dam_wall_4k_32x16_rot90 golden_bay_4k_32x16_rot330"
+list="chapel_day_4k_32x16_rot0 golden_bay_4k_32x16_rot330 small_harbour_sunset_4k_32x16_rot270"
 
 for i in $list; do
     python train.py --eval \
