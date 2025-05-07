@@ -1,7 +1,7 @@
 #!/bin/bash
 
 root_dir="datasets/nerf_synthetic/"
-object="hook150_v2_statictimestep1"
+object="hook150_v3_transl_statictimestep1"
 list="chapel_day_4k_32x16_rot0 golden_bay_4k_32x16_rot330 small_harbour_sunset_4k_32x16_rot270"
 
 for i in $list; do
