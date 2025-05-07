@@ -13,11 +13,13 @@ for i in $list; do
         -envmap_prefix $i \
         --lambda_mask_entropy 0.1 \
         --save_training_vis \
-        --lambda_depth_var 1e-2
+        --lambda_depth_var 1e-2 \
+        --resolution 2
 
     python eval_nvs.py --eval \
         -m output/our_ds/${i}/3dgs \
-        -c output/our_ds/${i}/3dgs/chkpnt30000.pth
+        -c output/our_ds/${i}/3dgs/chkpnt30000.pth \
+        --resolution 2
 
     python train.py --eval \
         -s datasets/nerf_synthetic/$object/ \
@@ -39,10 +41,12 @@ for i in $list; do
         --lambda_light 0.01 \
         -t neilf --sample_num 64 \
         --save_training_vis_iteration 200 \
-        --lambda_env_smooth 0.01
+        --lambda_env_smooth 0.01 \
+        --resolution 2
     
     python eval_nvs.py --eval \
         -m output/our_ds/${i}/neilf \
         -c output/our_ds/${i}/neilf/chkpnt40000.pth \
-        -t neilf
+        -t neilf \
+        --resolution 2
 done
