@@ -202,8 +202,8 @@ def training(dataset: ModelParams, opt: OptimizationParams, pipe: PipelineParams
 
                     print("[ITER {}] Saving {} Checkpoint".format(iteration, com_name))
 
-    if dataset.eval:
-        eval_render(scene, gaussians, render_fn, pipe, background, opt, pbr_kwargs)
+    # if dataset.eval:
+    #     eval_render(scene, gaussians, render_fn, pipe, background, opt, pbr_kwargs)
 
 
 def training_report(tb_writer, iteration, tb_dict, scene: Scene, renderFunc, pipe,
@@ -391,7 +391,7 @@ if __name__ == "__main__":
     parser.add_argument('-envmap_prefix', type=str, default='')
     parser.add_argument('--gui', action='store_true', default=False, help="use gui")
     parser.add_argument('-t', '--type', choices=['render', 'normal', 'neilf'], default='render')
-    parser.add_argument("--test_interval", type=int, default=2500)
+    parser.add_argument("--test_interval", type=int, default=1000)
     parser.add_argument("--save_interval", type=int, default=5000)
     parser.add_argument("--quiet", action="store_true")
     parser.add_argument("--checkpoint_interval", type=int, default=5000)

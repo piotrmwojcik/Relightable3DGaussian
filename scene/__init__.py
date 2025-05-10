@@ -61,7 +61,7 @@ class Scene:
             scene_info = sceneLoadTypeCallbacks["NeILF"](args.source_path, args.white_background, args.eval,
                                                          debug=args.debug_cuda)
         else:
-            assert False, "Could not recognize scene type!"
+            assert False, f"Could not recognize scene type!, {args.source_path}"
 
         if not self.loaded_iter:
             with open(scene_info.ply_path, 'rb') as src_file, open(os.path.join(self.model_path, "input.ply"),

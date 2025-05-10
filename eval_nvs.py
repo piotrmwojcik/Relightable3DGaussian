@@ -33,6 +33,8 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
     makedirs(gts_path, exist_ok=True)
     makedirs(normal_path, exist_ok=True)
     if gaussians.use_pbr:
+        print("HEHEHEHEEHEHHE")
+        pbr_path =os.path.join(model_path, name, "ours_{}".format(iteration), "pbr")
         base_color_path = os.path.join(model_path, name, "ours_{}".format(iteration), "base_color")
         roughness_path = os.path.join(model_path, name, "ours_{}".format(iteration), "roughness")
         lights_path = os.path.join(model_path, name, "ours_{}".format(iteration), "lights")
@@ -45,6 +47,9 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
         makedirs(local_lights_path, exist_ok=True)
         makedirs(global_lights_path, exist_ok=True)
         makedirs(visibility_path, exist_ok=True)
+        makedirs(pbr_path, exist_ok=True)
+        print("HEHEHEHEEHEHHE", pbr_path)
+
     
     psnr_test = 0.0
     ssim_test = 0.0
@@ -53,18 +58,18 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
     for idx, view in enumerate(tqdm(views, desc="Rendering progress")):
         results = render_fn(view, gaussians, pipeline, background, dict_params=pbr_kwargs)
         gt = view.original_image[0:3, :, :]
-        save_image(results["render"], os.path.join(render_path, '{0:05d}'.format(idx) + ".png"))
+        save_image(results["render"], os.path.join(render_path, view.image_name + ".png"))
         save_image(gt, os.path.join(gts_path, '{0:05d}'.format(idx) + ".png"))
-        save_image(results["normal"] * 0.5 + 0.5,  os.path.join(normal_path, '{0:05d}'.format(idx) + ".png"))
+        save_image(results["normal"] * 0.5 + 0.5,  os.path.join(normal_path, view.image_name + ".png"))
         
         if gaussians.use_pbr:
-            save_image(results["pbr"], os.path.join(base_color_path, '{0:05d}'.format(idx) + ".png"))
-            save_image(results["base_color"], os.path.join(base_color_path, '{0:05d}'.format(idx) + ".png"))
-            save_image(results["roughness"], os.path.join(roughness_path, '{0:05d}'.format(idx) + ".png"))
-            save_image(results["lights"], os.path.join(lights_path, '{0:05d}'.format(idx) + ".png"))
-            save_image(results["local_lights"], os.path.join(local_lights_path, '{0:05d}'.format(idx) + ".png"))
-            save_image(results["global_lights"], os.path.join(global_lights_path, '{0:05d}'.format(idx) + ".png"))
-            save_image(results["visibility"], os.path.join(visibility_path, '{0:05d}'.format(idx) + ".png"))
+            save_image(results["pbr"], os.path.join(pbr_path, view.image_name + ".png"))
+            save_image(results["base_color"], os.path.join(base_color_path, view.image_name + ".png"))
+            save_image(results["roughness"], os.path.join(roughness_path, view.image_name + ".png"))
+            save_image(results["lights"], os.path.join(lights_path, view.image_name + ".png"))
+            save_image(results["local_lights"], os.path.join(local_lights_path, view.image_name + ".png"))
+            save_image(results["global_lights"], os.path.join(global_lights_path, view.image_name + ".png"))
+            save_image(results["visibility"], os.path.join(visibility_path, view.image_name + ".png"))
         
         img = results["pbr"] if gaussians.use_pbr else results["render"]
         with torch.no_grad():
@@ -120,8 +125,8 @@ def render_sets(dataset : ModelParams, pipeline : PipelineParams, skip_train : b
                 pbr_kwargs["env_light"] = direct_env_light
 
         
-        if not skip_train:
-             render_set(dataset.model_path, "train", iteration, scene.getTrainCameras(), gaussians, pipeline, background, pbr_kwargs)
+        # if not skip_train:
+        #      render_set(dataset.model_path, "train", iteration, scene.getTrainCameras(), gaussians, pipeline, background, pbr_kwargs)
 
         if not skip_test:
              render_set(dataset.model_path, "test", iteration, scene.getTestCameras(), gaussians, pipeline, background, pbr_kwargs)

@@ -10,3 +10,6 @@ datasets
 log
 point
 nvdiffrast
+output_specular
+output*
+nvdiffrast*
