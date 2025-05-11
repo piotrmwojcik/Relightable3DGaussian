@@ -104,7 +104,7 @@ if __name__ == '__main__':
         with open(os.path.join(args.model_path, "albedo_scale_linear_static.json"), "r") as f:
             albedo_scale_dict = json.load(f)
         base_color_scale = torch.tensor(albedo_scale_dict["2"], dtype=torch.float32, device="cuda")
-        gaussians.base_color_scale = rgb_to_srgb(base_color_scale) #we compute scale in linear!
+        gaussians.base_color_scale = base_color_scale #we compute scale in linear, and its used as linear
 
         render_kwargs = {
             "pc": gaussians,
