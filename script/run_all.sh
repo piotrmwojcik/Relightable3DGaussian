@@ -88,16 +88,16 @@ RESOLUTION=2
 
 SOURCE_PATHS=(
 "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/jumpingjacks150_v3_tex_statictimestep75"
-#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/spheres_cube_dataset_v5_statictimestep1"
-#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/standup150_v3_statictimestep75"
-#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/hook150_v3_transl_statictimestep1"
-#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/mouse150_v2_transl_statictimestep1"
+ "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/spheres_cube_dataset_v5_statictimestep1"
+ "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/standup150_v3_statictimestep75"
+ "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/hook150_v3_transl_statictimestep1"
+ "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/mouse150_v2_transl_statictimestep1"
 )
 
 LIGHT_COMBINATIONS=(
     "dam_wall_4k_32x16_rot90 small_harbour_sunset_4k_32x16_rot270 damwall harbour"
-    # "golden_bay_4k_32x16_rot330 dam_wall_4k_32x16_rot90 goldenbay damwall"
-    # "chapel_day_4k_32x16_rot0 golden_bay_4k_32x16_rot330 chapelday goldenbay"
+    "golden_bay_4k_32x16_rot330 dam_wall_4k_32x16_rot90 goldenbay damwall"
+    "chapel_day_4k_32x16_rot0 golden_bay_4k_32x16_rot330 chapelday goldenbay"
 )
 
 
@@ -157,20 +157,21 @@ for LIGHT_ENTRY in "${LIGHT_COMBINATIONS[@]}"; do
         #     -t neilf \
         #     --resolution=$RESOLUTION
 
-        # python scale_albedo.py --eval \
-        #     -m $OUTPUT_PATH/neilf/ \
-        #     -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
-        #     -t neilf \
-        #     --resolution=$RESOLUTION \
-        #     --static_source_path $SOURCE_PATH \
-        #     --test_light_folder $TEST_LIGHT
+        python scale_albedo.py --eval \
+            -m $OUTPUT_PATH/neilf/ \
+            -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
+            -t neilf \
+            --resolution=$RESOLUTION \
+            --static_source_path $SOURCE_PATH \
+            --test_light_folder $TEST_LIGHT
 
         python eval_relighting_ours.py --eval \
             -m $OUTPUT_PATH/neilf/ \
             -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
             --resolution=$RESOLUTION \
             --static_source_path $SOURCE_PATH \
-            --test_light_folder $TEST_LIGHT
+            --test_light_folder $TEST_LIGHT \
+            --sample_num 512
 
         done
     done

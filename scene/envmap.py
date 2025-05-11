@@ -5,6 +5,7 @@ import numpy as np
 import nvdiffrast.torch as dr
 import imageio
 import pyexr
+import cv2
 from utils.graphics_utils import srgb_to_rgb
 imageio.plugins.freeimage.download()
 
@@ -20,11 +21,14 @@ class EnvLight(torch.nn.Module):
 
     @staticmethod
     def load(envmap_path, scale, device):
-        if not envmap_path.endswith(".exr"):
-            image = srgb_to_rgb(imageio.imread(envmap_path)[:, :, :3] / 255)
-        else:
-            # load latlong env map from file
-            image = pyexr.open(envmap_path).get()[:, :, :3]
+        image = cv2.imread(envmap_path, cv2.IMREAD_UNCHANGED)
+        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        # if not envmap_path.endswith(".exr"):
+        #     image = srgb_to_rgb(imageio.imread(envmap_path)[:, :, :3] / 255)
+        # else:
+        #     # load latlong env map from file
+        #     image = pyexr.open(envmap_path).get()[:, :, :3]
 
         image = image * scale
 

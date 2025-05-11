@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     task_dict = {
         "env": {
-            "capture_list": ["pbr", "pbr_env", "base_color"],
+            "capture_list": ["pbr", "pbr_env", "base_color", "global_lights", "normal", "diffuse"],
             "envmap_path": os.path.join(args.static_source_path, f"{args.test_light_folder}.hdr" ),
         },
     }
