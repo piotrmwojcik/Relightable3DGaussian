@@ -176,11 +176,19 @@ def render_view(viewpoint_camera: Camera, pc: GaussianModel, pipe, bg_color: tor
 
     # Those Gaussians that were frustum culled or had a radius of 0 were not visible.
     # They will be excluded from value updates used in the splitting criteria.
+
+    # Apply world → view rotation
+    R = viewpoint_camera.world_view_transform[:3, :3]  # rotation only
+    normals_view = (rendered_normal.permute(1, 2, 0) @ R).permute(2, 0, 1)  # [H,W,3] @ [3,3] → [H,W,3]
+    normals_view = -normals_view * mask  # negate if your system expects inward-pointing normals
+
+
     results = {"render": rendered_image,
                "depth": rendered_depth,
                "depth_var": rendered_var,
                "pbr": rgb_to_srgb(rendered_pbr),
                "normal": rendered_normal,
+               "normal_view": normals_view,
                "pseudo_normal": rendered_pseudo_normal,
                "surface_xyz": rendered_surface_xyz,
                "opacity": rendered_opacity,

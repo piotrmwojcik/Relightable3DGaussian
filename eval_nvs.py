@@ -23,6 +23,9 @@ from scene.direct_light_map import DirectLightMap
 from lpipsPyTorch import lpips
 from utils.loss_utils import ssim
 from utils.image_utils import psnr
+import torch
+import torchvision.utils as vutils
+import torchvision.transforms.functional as TF
 
 
 def render_set(model_path, name, iteration, views, gaussians, pipeline, background, pbr_kwargs=None):
@@ -70,6 +73,8 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
             save_image(results["local_lights"], os.path.join(local_lights_path, view.image_name + ".png"))
             save_image(results["global_lights"], os.path.join(global_lights_path, view.image_name + ".png"))
             save_image(results["visibility"], os.path.join(visibility_path, view.image_name + ".png"))
+
+
         
         img = results["pbr"] if gaussians.use_pbr else results["render"]
         with torch.no_grad():
@@ -123,6 +128,20 @@ def render_sets(dataset : ModelParams, pipeline : PipelineParams, skip_train : b
                 else:
                     print("Failed to load!")
                 pbr_kwargs["env_light"] = direct_env_light
+                
+        print(direct_env_light.get_env.shape, "SHAHAHAHAHAHAHA")
+        # Assume direct_env_light.get_env is a torch tensor with shape [1, 16, 32, 3]
+        env = direct_env_light.get_env.squeeze(0)  # shape becomes [16, 32, 3]
+
+        # 1. Scale by max
+        env_scaled = env / env.max()
+        env_scaled_img = env_scaled.permute(2, 0, 1)  # to [C, H, W] for saving
+        vutils.save_image(env_scaled_img, 'envmap_scaled.png')
+
+        # 2. Clamp to [0, 1]
+        env_clamped = env.clamp(0, 1)
+        env_clamped_img = env_clamped.permute(2, 0, 1)  # to [C, H, W]
+        vutils.save_image(env_clamped_img, 'envmap_clamped.png')
 
         
         # if not skip_train:

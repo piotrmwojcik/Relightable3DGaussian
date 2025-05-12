@@ -69,10 +69,12 @@ if __name__ == '__main__':
 
     task_dict = {
         "env": {
-            "capture_list": ["pbr", "pbr_env", "base_color", "global_lights", "normal", "diffuse"],
+            "capture_list": ["pbr", "pbr_env", "base_color", "global_lights", "normal", "normal_view", "diffuse"],
             "envmap_path": os.path.join(args.static_source_path, f"{args.test_light_folder}.hdr" ),
         },
     }
+
+    print(task_dict["env"]["capture_list"])
 
     print("EVAL FOR ENVMAP", task_dict["env"]["envmap_path"])
 
@@ -85,6 +87,7 @@ if __name__ == '__main__':
     task_names = ['env']
     for task_name in task_names:
         task_dir = os.path.join(results_dir, task_name)
+        print(task_dir, "TASKKK DIRRRR")
         os.makedirs(task_dir, exist_ok=True)
         light = EnvLight(path=task_dict[task_name]["envmap_path"], scale=1)
 
@@ -129,6 +132,8 @@ if __name__ == '__main__':
         capture_list = task_dict[task_name]["capture_list"]
         for capture_type in capture_list:
             capture_type_dir = os.path.join(task_dir, capture_type)
+            print(capture_type_dir, "Capture dirrrrr")
+
             os.makedirs(capture_type_dir, exist_ok=True)
 
         os.makedirs(os.path.join(task_dir, "gt"), exist_ok=True)
@@ -176,6 +181,9 @@ if __name__ == '__main__':
             
             for capture_type in capture_list:
                 if capture_type == "normal":
+                    render_pkg[capture_type] = render_pkg[capture_type] * 0.5 + 0.5
+                    render_pkg[capture_type] = render_pkg[capture_type] * mask + (1 - mask) * bg
+                elif capture_type == "normal_view":
                     render_pkg[capture_type] = render_pkg[capture_type] * 0.5 + 0.5
                     render_pkg[capture_type] = render_pkg[capture_type] * mask + (1 - mask) * bg
                 elif capture_type in ["roughness", "diffuse", "specular", "lights", "local_lights", "global_lights", "visibility"]:
