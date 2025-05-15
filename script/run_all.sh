@@ -11,8 +11,8 @@ RESOLUTION=2
 ############### DIFFUSE!!!
 
 SOURCE_PATHS=(
-"/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/jumpingjacks150_v3_tex_statictimestep75"
-#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/spheres_cube_dataset_v5_statictimestep1"
+# "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/jumpingjacks150_v3_tex_statictimestep75"
+ "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/spheres_cube_dataset_v5_statictimestep1"
 #  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/standup150_v3_statictimestep75"
 #  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/hook150_v3_transl_statictimestep1"
 #  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/mouse150_v2_transl_statictimestep1"
@@ -80,7 +80,7 @@ for LIGHT_ENTRY in "${LIGHT_COMBINATIONS[@]}"; do
             -m $OUTPUT_PATH/neilf/ \
             -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
             -t neilf \
-            --resolution=$RESOLUTION --sample_num 512 
+            --resolution=$RESOLUTION --sample_num 256 
 
         # python scale_albedo.py --eval \
         #     -m $OUTPUT_PATH/neilf/ \
@@ -96,7 +96,7 @@ for LIGHT_ENTRY in "${LIGHT_COMBINATIONS[@]}"; do
         #     --resolution=$RESOLUTION \
         #     --static_source_path $SOURCE_PATH \
         #     --test_light_folder $TEST_LIGHT \
-        #     --sample_num 512 
+        #     --sample_num 1024
         done
     done
 
@@ -169,11 +169,11 @@ for LIGHT_ENTRY in "${LIGHT_COMBINATIONS[@]}"; do
 #             --lambda_env_smooth 0.01 \
 #             --resolution=$RESOLUTION
         
-#         python eval_nvs.py --eval \
-#             -m $OUTPUT_PATH/neilf/ \
-#             -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
-#             -t neilf \
-#             --resolution=$RESOLUTION
+        # python eval_nvs.py --eval \
+        #     -m $OUTPUT_PATH/neilf/ \
+        #     -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
+        #     -t neilf \
+        #     --resolution=$RESOLUTION
 
 #         python scale_albedo.py --eval \
 #             -m $OUTPUT_PATH/neilf/ \

@@ -26,6 +26,10 @@ from utils.image_utils import psnr
 import torch
 import torchvision.utils as vutils
 import torchvision.transforms.functional as TF
+import torch
+import OpenEXR
+import Imath
+import numpy as np
 
 
 def render_set(model_path, name, iteration, views, gaussians, pipeline, background, pbr_kwargs=None):
@@ -78,6 +82,8 @@ def render_set(model_path, name, iteration, views, gaussians, pipeline, backgrou
         
         img = results["pbr"] if gaussians.use_pbr else results["render"]
         with torch.no_grad():
+
+            print("PSNR, SSIM, LPIPS", psnr(img, gt).mean().double(), ssim(img, gt).mean().double(),lpips(img, gt, net_type='vgg').mean().double() )
             psnr_test += psnr(img, gt).mean().double()
             ssim_test += ssim(img, gt).mean().double()
             lpips_test += lpips(img, gt, net_type='vgg').mean().double()
@@ -142,6 +148,34 @@ def render_sets(dataset : ModelParams, pipeline : PipelineParams, skip_train : b
         env_clamped = env.clamp(0, 1)
         env_clamped_img = env_clamped.permute(2, 0, 1)  # to [C, H, W]
         vutils.save_image(env_clamped_img, 'envmap_clamped.png')
+
+
+        # Assume direct_env_light.get_env is [1, 16, 32, 3]
+        env = direct_env_light.get_env.squeeze(0)  # [16, 32, 3]
+
+        # Convert to numpy and float32
+        env_np = env.cpu().numpy().astype(np.float32)  # [H, W, C]
+        H, W, _ = env_np.shape
+
+        # Prepare EXR header
+        header = OpenEXR.Header(W, H)
+        FLOAT = Imath.PixelType(Imath.PixelType.FLOAT)
+
+        # Split channels
+        channels = {
+            'R': env_np[:, :, 0].flatten().tobytes(),
+            'G': env_np[:, :, 1].flatten().tobytes(),
+            'B': env_np[:, :, 2].flatten().tobytes()
+        }
+
+        # Save as EXR
+        exr_path = 'envmap_train_r3dg.exr'
+        exr_file = OpenEXR.OutputFile(exr_path, header)
+        exr_file.writePixels(channels)
+        exr_file.close()
+
+        print(f"Saved regular envmap to {exr_path}")
+
 
         
         # if not skip_train:
