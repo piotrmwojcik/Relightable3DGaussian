@@ -142,12 +142,12 @@ def render_sets(dataset : ModelParams, pipeline : PipelineParams, skip_train : b
         # 1. Scale by max
         env_scaled = env / env.max()
         env_scaled_img = env_scaled.permute(2, 0, 1)  # to [C, H, W] for saving
-        vutils.save_image(env_scaled_img, 'envmap_scaled.png')
+        vutils.save_image(env_scaled_img, os.path.join(dataset.model_path,'envmap_scaled.png'))
 
         # 2. Clamp to [0, 1]
         env_clamped = env.clamp(0, 1)
         env_clamped_img = env_clamped.permute(2, 0, 1)  # to [C, H, W]
-        vutils.save_image(env_clamped_img, 'envmap_clamped.png')
+        vutils.save_image(env_clamped_img, os.path.join(dataset.model_path, 'envmap_clamped.png'))
 
 
         # Assume direct_env_light.get_env is [1, 16, 32, 3]
