@@ -11,17 +11,16 @@ RESOLUTION=2
 ############### DIFFUSE!!!
 
 SOURCE_PATHS=(
-# "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/jumpingjacks150_v3_tex_statictimestep75"
- "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/spheres_cube_dataset_v5_statictimestep1"
-#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/standup150_v3_statictimestep75"
-#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/hook150_v3_transl_statictimestep1"
-#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/mouse150_v2_transl_statictimestep1"
-#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight/spheres_cube_dataset_v8_spec32_statictimestep1"
+#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight-spec32/hook150_v5_spec32_statictimestep1"
+#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight-spec32/mouse150_v5_spec32_statictimestep1"
+ "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight-spec32/jumpingjacks150_v5_spec32_statictimestep75"
+#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight-spec32/spheres_v5_spec32_statictimestep1"
+#  "/home/jk/Dynamic-2DGS-relightable/data/d-nerf-relight-spec32/standup150_v5_spec32_statictimestep75"
 )
 
 LIGHT_COMBINATIONS=(
-    # "dam_wall_4k_32x16_rot90 small_harbour_sunset_4k_32x16_rot270 damwall harbour"
-    "golden_bay_4k_32x16_rot330 dam_wall_4k_32x16_rot90 goldenbay damwall"
+    "dam_wall_4k_32x16_rot90 small_harbour_sunset_4k_32x16_rot270 damwall harbour"
+    # "golden_bay_4k_32x16_rot330 dam_wall_4k_32x16_rot90 goldenbay damwall"
     # "chapel_day_4k_32x16_rot0 golden_bay_4k_32x16_rot330 chapelday goldenbay"
 )
 
@@ -33,8 +32,8 @@ for LIGHT_ENTRY in "${LIGHT_COMBINATIONS[@]}"; do
     for SOURCE_PATH in "${SOURCE_PATHS[@]}"; do
         SCENE_NAME=$(basename "$SOURCE_PATH")
 
-        OUTPUT_PATH="output_diffuse/${TRAIN_NAME}_${TEST_NAME}/${SCENE_NAME}_r${RESOLUTION}"
-        CKPT_PATH="output_diffuse/${TRAIN_NAME}_${TEST_NAME}/${SCENE_NAME}_r${RESOLUTION}"
+        OUTPUT_PATH="output_specular32/${TRAIN_NAME}_${TEST_NAME}/${SCENE_NAME}_r${RESOLUTION}"
+        CKPT_PATH="output_specular32/${TRAIN_NAME}_${TEST_NAME}/${SCENE_NAME}_r${RESOLUTION}"
 
 
         echo "Processing $SOURCE_PATH -> $OUTPUT_PATH"
@@ -76,11 +75,11 @@ for LIGHT_ENTRY in "${LIGHT_COMBINATIONS[@]}"; do
         #     --lambda_env_smooth 0.01 \
         #     --resolution=$RESOLUTION
         
-        python eval_nvs.py --eval \
-            -m $OUTPUT_PATH/neilf/ \
-            -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
-            -t neilf \
-            --resolution=$RESOLUTION --sample_num 256 
+        # python eval_nvs.py --eval \
+        #     -m $OUTPUT_PATH/neilf/ \
+        #     -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
+        #     -t neilf \
+        #     --resolution=$RESOLUTION
 
         # python scale_albedo.py --eval \
         #     -m $OUTPUT_PATH/neilf/ \
@@ -90,13 +89,13 @@ for LIGHT_ENTRY in "${LIGHT_COMBINATIONS[@]}"; do
         #     --static_source_path $SOURCE_PATH \
         #     --test_light_folder $TEST_LIGHT
 
-        # python eval_relighting_ours.py --eval \
-        #     -m $OUTPUT_PATH/neilf/ \
-        #     -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
-        #     --resolution=$RESOLUTION \
-        #     --static_source_path $SOURCE_PATH \
-        #     --test_light_folder $TEST_LIGHT \
-        #     --sample_num 1024
+        python eval_relighting_ours.py --eval \
+            -m $OUTPUT_PATH/neilf/ \
+            -c $OUTPUT_PATH/neilf/chkpnt40000.pth \
+            --resolution=$RESOLUTION \
+            --static_source_path $SOURCE_PATH \
+            --test_light_folder chapel_day_4k_32x16_rot0 \
+            --sample_num 1024
         done
     done
 

@@ -201,9 +201,9 @@ if __name__ == '__main__':
             save_image(gt_image_env, os.path.join(task_dir, "gt_pbr_env", f"{idx}.png"))
             
             with torch.no_grad():
-                psnr_pbr += psnr(render_pkg['pbr'], gt_image).mean().double()
-                ssim_pbr += ssim(render_pkg['pbr'], gt_image).mean().double()
-                lpips_pbr += lpips(render_pkg['pbr'], gt_image, net_type='vgg').mean().double()
+                psnr_pbr += psnr(torch.nan_to_num(render_pkg['pbr'].clamp(0,1), nan=0.0), gt_image).mean().double()
+                ssim_pbr += ssim(torch.nan_to_num(render_pkg['pbr'].clamp(0,1),nan=0.0), gt_image).mean().double()
+                lpips_pbr += lpips(torch.nan_to_num(render_pkg['pbr'].clamp(0,1),nan=0.0), gt_image, net_type='vgg').mean().double()
                 
                 #ALBEDO IN LINEAR for psnr
                 psnr_albedo += psnr(srgb_to_rgb(render_pkg['base_color']), srgb_to_rgb(gt_albedo)).mean().double()
